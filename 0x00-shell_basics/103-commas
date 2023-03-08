@@ -1,2 +1,2 @@
 #!/bin/bash
-shopt -s nullglob; for f in .* *; do printf '%s,' "$f"; done | sed 's/,$/\n/'
+ls -amp | sort -d
