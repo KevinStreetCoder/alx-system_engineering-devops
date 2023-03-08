@@ -1,0 +1,1 @@
+Introduction to shell navigation, basic commands, and scripting.
