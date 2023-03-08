@@ -1,2 +1,2 @@
 #!/bin/bash
-ls -1vdp --group-directories-first | tr '\n' ',' | sed 's/,$/\n/'
+shopt -s nullglob; for f in .* *; do printf '%s,' "$f"; done | sed 's/,$/\n/'
