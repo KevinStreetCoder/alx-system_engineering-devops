@@ -1,2 +1,2 @@
 #!/bin/bash
-ls -Ap1 | awk '{printf "%s, ", $0}' | sed 's/,\s$/\n/' | sed 's/^\(.*\/\)$/.\1/' | tr -d '\n'
+ls -p -a -m -x -d --group-directories-first *
