@@ -1,2 +1,2 @@
 # alx-system_engineering-devops
-Introduction to shell navigation, basic commands, and scripting.
+This repository contains scripts and projects completed as part of the ALX Software Engineering program's System Engineering & DevOps curriculum.
