@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# This script lists the contents of the current directory with only the part of the name after the first dash.
+
+for file in *; do
+    if [[ -f "$file" && ! "$file" =~ ^\. ]]; then
+        echo "${file#*-}"
+    fi
+done
