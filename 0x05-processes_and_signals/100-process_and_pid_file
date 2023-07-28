@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# This script creates the file /var/run/myscript.pid containing its PID,
+# displays "To infinity and beyond" indefinitely, and handles various signals.
+
+# Function to handle the SIGTERM and SIGQUIT signals
+terminate_script() {
+    echo "I hate the kill command"
+    rm /var/run/myscript.pid
+    exit 0
+}
+
+# Function to handle the SIGINT signal
+handle_sigint() {
+    echo "Y U no love me?!"
+}
+
+# Register the signal handlers
+trap 'terminate_script' SIGTERM SIGQUIT
+trap 'handle_sigint' SIGINT
+
+# Create the PID file
+echo "$$" > /var/run/myscript.pid
+
+# Infinite loop to display "To infinity and beyond"
+while true; do
+    echo "To infinity and beyond"
+    sleep 1
+done
