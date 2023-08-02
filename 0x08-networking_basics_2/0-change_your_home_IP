@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# This script configures localhost to resolve to 127.0.0.2 and facebook.com to resolve to 8.8.8.8.
+
+# Check if the script is run with root privileges
+if [[ $EUID -ne 0 ]]; then
+    echo "Please run this script with sudo or as root."
+    exit 1
+fi
+
+# Define the hosts file path
+hosts_file="/etc/hosts"
+
+# Backup the original hosts file
+cp "$hosts_file" "$hosts_file.bak"
+
+# Update the hosts file
+sed -i 's/localhost$/localhost 127.0.0.2/' "$hosts_file"
+echo "8.8.8.8 facebook.com" >> "$hosts_file"
+
+# Flush the DNS cache to apply changes immediately (Ubuntu 20.04)
+systemd-resolve --flush-caches
+
+echo "Hosts file has been updated. Now localhost resolves to 127.0.0.2 and facebook.com resolves to 8.8.8.8."
