@@ -1,8 +1,2 @@
-#!/usr/bin/env bash
-# This script provides answers to the OSI model questions.
-
-# Answer to the first question
-echo "2" # The OSI model is a conceptual model that characterizes the communication functions of a telecommunication system without regard to their underlying internal structure and technology.
-
-# Answer to the second question
-echo "2" # The OSI model is organized from the lowest to the highest level.
+2
+2
