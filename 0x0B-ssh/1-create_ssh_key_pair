@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# This script generates an RSA key pair with a passphrase
+
+# Generate the RSA key pair with a passphrase and save it in the file "school"
+ssh-keygen -t rsa -b 4096 -f school -N "betty"
+
+# Print a message to indicate success
+echo "RSA key pair generated and saved as 'school'"
