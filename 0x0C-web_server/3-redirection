@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+# Install Nginx if it's not already installed
+if ! [ -x "$(command -v nginx)" ]; then
+  apt-get update
+  apt-get install -y nginx
+fi
+
+# Create a custom Nginx configuration file for redirection
+cat > /etc/nginx/sites-available/redirect <<EOF
+server {
+    listen 80;
+    server_name your_domain.com; # Replace with your actual domain
+
+    location /redirect_me {
+        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
+    }
+
+    # Additional server configuration if needed
+}
+EOF
+
+# Create a symbolic link to enable the site
+ln -s /etc/nginx/sites-available/redirect /etc/nginx/sites-enabled/
+
+# Test Nginx configuration and reload it
+nginx -t && service nginx reload
