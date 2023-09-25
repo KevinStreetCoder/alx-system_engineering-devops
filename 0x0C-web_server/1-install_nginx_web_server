@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# Update the package list and install nginx with the -y option to avoid prompts
+apt-get update
+apt-get install -y nginx
+
+# Create a custom HTML page with "Hello World!"
+echo "Hello World!" > /var/www/html/index.html
+
+# Check if Nginx is already running and start it if not
+if ! ps aux | grep -q '[n]ginx'; then
+    service nginx start
+fi
