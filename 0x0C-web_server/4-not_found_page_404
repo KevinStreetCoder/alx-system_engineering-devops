@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+# Install Nginx if it's not already installed
+if ! [ -x "$(command -v nginx)" ]; then
+  apt-get update
+  apt-get install -y nginx
+fi
+
+# Create a custom Nginx configuration file for the custom 404 page
+cat > /etc/nginx/sites-available/custom_404 <<EOF
+server {
+    listen 80 default_server;
+    server_name _;
+
+    error_page 404 /404_custom.html;
+    location = /404_custom.html {
+        root /usr/share/nginx/html;
+        internal;
+    }
+
+    # Additional server configuration if needed
+}
+EOF
+
+# Create the custom 404 HTML page
+echo "Ceci n'est pas une page" > /usr/share/nginx/html/404_custom.html
+
+# Create a symbolic link to enable the site
+ln -s /etc/nginx/sites-available/custom_404 /etc/nginx/sites-enabled/
+
+# Test Nginx configuration and reload it
+nginx -t && service nginx reload
