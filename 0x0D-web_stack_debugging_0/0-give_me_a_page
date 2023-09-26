@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# This script fixes the Apache configuration to return a page containing "Hello Holberton"
+
+# Start the Apache service
+service apache2 start
+
+# Exit
+exit 0
