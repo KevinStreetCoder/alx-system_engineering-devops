@@ -1,57 +1,24 @@
-# Ensure Nginx package is installed
+# Setup New Ubuntu server with nginx
+
+exec { 'update system':
+        command => '/usr/bin/apt-get update',
+}
+
 package { 'nginx':
-  ensure => 'installed',
+	ensure => 'installed',
+	require => Exec['update system']
 }
 
-# Ensure Nginx service is enabled and running
-service { 'nginx':
-  ensure  => 'running',
-  enable  => true,
-  require => Package['nginx'],
+file {'/var/www/html/index.html':
+	content => 'Hello World!'
 }
 
-# Create a custom Nginx virtual host configuration
-file { '/etc/nginx/sites-available/redirect':
-  ensure => present,
-  content => "server {
-    listen 80;
-    server_name your_domain.com; # Replace with your actual domain
-
-    location /redirect_me {
-        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
-    }
-
-    # Additional server configuration if needed
-  }",
-  require => Package['nginx'],
+exec {'redirect_me':
+	command => 'sed -i "24i\	rewrite ^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;" /etc/nginx/sites-available/default',
+	provider => 'shell'
 }
 
-# Create a symbolic link to enable the site
-file { '/etc/nginx/sites-enabled/redirect':
-  ensure => link,
-  target => '/etc/nginx/sites-available/redirect',
-  require => File['/etc/nginx/sites-available/redirect'],
+service {'nginx':
+	ensure => running,
+	require => Package['nginx']
 }
-
-# Create a custom HTML page with "Hello World!"
-file { '/usr/share/nginx/html/index.html':
-  ensure  => present,
-  content => 'Hello World!',
-  require => Package['nginx'],
-}
-
-# Test Nginx configuration and reload it
-exec { 'nginx-config-reload':
-  command     => '/usr/sbin/nginx -t && /usr/sbin/service nginx reload',
-  refreshonly => true,
-  require     => [
-    Package['nginx'],
-    Service['nginx'],
-    File['/etc/nginx/sites-available/redirect'],
-    File['/etc/nginx/sites-enabled/redirect'],
-    File['/usr/share/nginx/html/index.html'],
-  ],
-}
-
-# Notify the service to restart when configuration changes
-Service['nginx'] ~> Exec['nginx-config-reload']
