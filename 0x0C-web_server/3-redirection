@@ -1,27 +1,42 @@
 #!/usr/bin/env bash
+# Configure a new Ubuntu machine by installing Nginx.
+# Nginx will listen on port 80 and serve a page with "Hello World."
 
-# Install Nginx if it's not already installed
-if ! [ -x "$(command -v nginx)" ]; then
-  apt-get update
-  apt-get install -y nginx
-fi
+# Define color variables for output
+blue='\e[1;34m'
+brown='\e[0;33m'
+green='\e[1;32m'
+reset='\033[0m'
 
-# Create a custom Nginx configuration file for redirection
-cat > /etc/nginx/sites-available/redirect <<EOF
-server {
-    listen 80;
-    server_name your_domain.com; # Replace with your actual domain
+# Display update and installation messages
+echo -e "${blue}Updating and installing ${brown}Nginx${blue}.${reset}\n"
+sudo apt-get update -y -qq
+sudo apt-get install nginx -y
 
-    location /redirect_me {
-        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
-    }
+# Display configuration messages
+echo -e "\n${blue}Setting up some minor configurations.${reset}\n"
 
-    # Additional server configuration if needed
-}
-EOF
+# Start Nginx service
+sudo service nginx start
 
-# Create a symbolic link to enable the site
-ln -s /etc/nginx/sites-available/redirect /etc/nginx/sites-enabled/
+# Allow Nginx through the firewall
+sudo ufw allow 'Nginx HTTP'
 
-# Test Nginx configuration and reload it
-nginx -t && service nginx reload
+# Grant ownership of website files to the current user for easy editing
+sudo chown -R "$USER":"$USER" /var/www/html
+sudo chmod -R 755 /var/www
+
+# Backup the default index
+cp /var/www/html/index.nginx-debian.html /var/www/html/index.nginx-debian.html.bckp
+
+# Create a new index with "Hello World!"
+echo -e "Hello World!" > /var/www/html/index.nginx-debian.html
+
+# Set up a redirection from /redirect_me to a YouTube video
+sudo sed -i '24i\	rewrite ^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;' /etc/nginx/sites-available/default
+
+# Restart Nginx to apply changes
+sudo service nginx restart
+
+# Display completion message
+echo -e "\n${green}Configuration completed.${reset} ✅\n"
