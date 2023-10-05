@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# This script displays information about subdomains for a given domain.
+
+if [ "$#" -eq 0 ] || [ "$#" -gt 2 ]; then
+    echo "Usage: $0 domain [subdomain]"
+    exit 1
+fi
+
+domain="$1"
+subdomain="$2"
+
+# Check subdomains
+subdomains=("www" "lb-01" "web-01" "web-02")
+
+# If subdomain is provided, only check that subdomain
+if [ -n "$subdomain" ]; then
+    subdomains=("$subdomain")
+fi
+
+# Loop through subdomains and display information
+for sub in "${subdomains[@]}"; do
+    # Use dig to query DNS for subdomain
+    result=$(dig +short "$sub.$domain" | head -n1)
+    if [ -n "$result" ]; then
+        echo "The subdomain $sub is a A record and points to $result"
+    fi
+done
+
