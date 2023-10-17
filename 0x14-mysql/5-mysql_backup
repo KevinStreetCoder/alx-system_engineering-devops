@@ -29,4 +29,3 @@ rm "$mysql_dump_file"
 
 # Output the created archive file name
 echo "Backup completed. Archive file: $archive_file"
-
