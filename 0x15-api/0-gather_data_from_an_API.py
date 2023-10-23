@@ -14,8 +14,8 @@ if __name__ == "__main__":
     todos_url = "{}/todos?userId={}".format(base_url, employee_id)
 
     try:
-        user_response = requests.get(user_url)
-        todos_response = requests.get(todos_url)
+        user_response = requests.get(user_url, verify=False)  # Add verify=False to bypass SSL verification
+        todos_response = requests.get(todos_url, verify=False)  # Add verify=False to bypass SSL verification
         user_data = user_response.json()
         todos_data = todos_response.json()
 
