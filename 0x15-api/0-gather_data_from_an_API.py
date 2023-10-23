@@ -10,8 +10,8 @@ if __name__ == "__main__":
 
     employee_id = sys.argv[1]
     base_url = "https://jsonplaceholder.typicode.com"
-    user_url = f"{base_url}/users/{employee_id}"
-    todos_url = f"{base_url}/todos?userId={employee_id}"
+    user_url = "{}/users/{}".format(base_url, employee_id)
+    todos_url = "{}/todos?userId={}".format(base_url, employee_id)
 
     try:
         user_response = requests.get(user_url)
@@ -23,7 +23,7 @@ if __name__ == "__main__":
         total_tasks = len(todos_data)
         completed_tasks = sum(1 for todo in todos_data if todo['completed'])
 
-        print(f"Employee {user_data['name']} is done with tasks({completed_tasks}/{total_tasks}):")
+        print("Employee {} is done with tasks({}/{total}):".format(user_data['name'], completed_tasks, total=total_tasks))
 
         for todo in todos_data:
             if todo['completed']:
