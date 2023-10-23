@@ -20,18 +20,19 @@ if __name__ == "__main":
         user_data = user_response.json()
         todos_data = todos_response.json()
 
-        # Create a CSV file with the user's ID as the filename
+        # Create a CSV file with the user's ID as the file name
         csv_filename = "{}.csv".format(user_data['id'])
 
-        # Open the CSV file for writing
-        with open(csv_filename, 'w', newline='') as csvfile:
-            csv_writer = csv.writer(csvfile, quoting=csv.QUOTE_MINIMAL)
+        with open(csv_filename, 'w', newline='') as csv_file:
+            csv_writer = csv.writer(csv_file)
+            
+            # Write the header row
             csv_writer.writerow(["USER_ID", "USERNAME", "TASK_COMPLETED_STATUS", "TASK_TITLE"])
 
             for todo in todos_data:
-                csv_writer.writerow([user_data['id'], user_data['username'], str(todo['completed']), todo['title'])
+                csv_writer.writerow([user_data['id'], user_data['username'], todo['completed'], todo['title']])
 
-        print("Data has been exported to {}.".format(csv_filename))
+        print("CSV data exported to {}".format(csv_filename))
 
     except requests.exceptions.RequestException as e:
         print("An error occurred:", e)
