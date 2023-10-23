@@ -29,7 +29,7 @@ if __name__ == "__main__":
 
         # Create and write data to CSV file
         csv_filename = "{}.csv".format(user_id)
-        with open(csv_filename, 'w', newline='') as csv_file:
+        with open(csv_filename, 'w') as csv_file:
             csv_writer = csv.writer(csv_file)
             csv_writer.writerow(["USER_ID", "USERNAME", "TASK_COMPLETED_STATUS", "TASK_TITLE"])
             
