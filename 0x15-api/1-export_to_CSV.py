@@ -4,7 +4,7 @@ import requests
 import csv
 import sys
 
-if __name__ == "__main":
+if __name__ == "__main__":
     if len(sys.argv) != 2:
         print("Usage: {} <employee_id>".format(sys.argv[0]))
         sys.exit(1)
