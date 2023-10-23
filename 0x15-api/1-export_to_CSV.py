@@ -4,7 +4,7 @@ import requests
 import csv
 import sys
 
-if __name__ == "__main__":
+if __name__ == "__main":
     if len(sys.argv) != 2:
         print("Usage: {} <employee_id>".format(sys.argv[0]))
         sys.exit(1)
@@ -15,28 +15,23 @@ if __name__ == "__main__":
     todos_url = "{}/todos?userId={}".format(base_url, employee_id)
 
     try:
-        user_response = requests.get(user_url)
-        todos_response = requests.get(todos_url)
+        user_response = requests.get(user_url, verify=False)
+        todos_response = requests.get(todos_url, verify=False)
         user_data = user_response.json()
         todos_data = todos_response.json()
 
-        # Count the number of completed and total tasks
-        total_tasks = len(todos_data)
-        completed_tasks = sum(1 for todo in todos_data if todo['completed'])
+        # Create a CSV file with the user's ID as the filename
+        csv_filename = "{}.csv".format(user_data['id'])
 
-        user_id = user_data['id']
-        username = user_data['username']
-
-        # Create and write data to CSV file
-        csv_filename = "{}.csv".format(user_id)
-        with open(csv_filename, 'w') as csv_file:
-            csv_writer = csv.writer(csv_file)
+        # Open the CSV file for writing
+        with open(csv_filename, 'w', newline='') as csvfile:
+            csv_writer = csv.writer(csvfile, quoting=csv.QUOTE_MINIMAL)
             csv_writer.writerow(["USER_ID", "USERNAME", "TASK_COMPLETED_STATUS", "TASK_TITLE"])
-            
-            for todo in todos_data:
-                csv_writer.writerow([user_id, username, str(todo['completed']), todo['title'])
 
-        print("Data exported to {}.csv".format(user_id))
+            for todo in todos_data:
+                csv_writer.writerow([user_data['id'], user_data['username'], str(todo['completed']), todo['title'])
+
+        print("Data has been exported to {}.".format(csv_filename))
 
     except requests.exceptions.RequestException as e:
         print("An error occurred:", e)
